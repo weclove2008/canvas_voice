@@ -1,7 +1,7 @@
 {
 	"approved" : true,
 	"contentrating" : "Everyone",
-	"description" : "使用canvas画频谱实现音乐可视化！\n\n你可以修改大部分参数来实现不同显示方式：\n- 自定义背景图\n- 颜色透明度\n- 模糊颜色透明度\n- 线条颜色\n- 模糊颜色\n- 模糊大小\n- 频谱位于屏幕的X轴\n- 频谱位于屏幕的Y轴\n- 线条宽度\n- 线条振幅\n- 线条间距\n- 是否启动线条最低高度\n\n\n====2017.05.02 update====\n- 添加修改背景图显示方式\n\n====2017.05.05 update====\n- 添加线条圆角显示方式\n\n====2018.03.05 update====\n- 修改了一下默认显示参数",
+	"description" : "使用canvas画频谱实现音乐可视化！\r\n\r\n你可以修改大部分参数来实现不同显示方式：\r\n- 自定义背景图\r\n- 颜色透明度\r\n- 模糊颜色透明度\r\n- 线条颜色\r\n- 模糊颜色\r\n- 模糊大小\r\n- 频谱位于屏幕的X轴\r\n- 频谱位于屏幕的Y轴\r\n- 线条宽度\r\n- 线条振幅\r\n- 线条间距\r\n- 是否启动线条最低高度\r\n\r\n\r\n====2017.05.02 update====\r\n- 添加修改背景图显示方式\r\n\r\n====2017.05.05 update====\r\n- 添加线条圆角显示方式\r\n\r\n====2018.03.05 update====\r\n- 修改了一下默认显示参数",
 	"file" : "index.html",
 	"general" : 
 	{
@@ -59,6 +59,24 @@
 				"order" : 5,
 				"text" : "<b>频谱相关设置:</b>",
 				"type" : "text"
+			},
+			"spectrumStyle" : 
+			{
+				"options" : 
+				[
+					{
+						"label" : "条状",
+						"value" : 1
+					},
+					{
+						"label" : "圆形",
+						"value" : 2
+					}
+				],
+				"order" : 18,
+				"text" : "频谱图风格",
+				"type" : "combo",
+				"value" : 1
 			},
 			"gackgroundStyle" : 
 			{
@@ -170,6 +188,8 @@
 	"tags" : [ "Music" ],
 	"title" : "canvas_voice",
 	"type" : "web",
+	"version" : 0,
 	"visibility" : "public",
-	"workshopid" : 908184092
+	"workshopid" : 908184092,
+	"workshopurl" : "steam://url/CommunityFilePage/908184092"
 }

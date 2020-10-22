@@ -17,25 +17,40 @@ var param = {
     round: false, // 是否启用线条圆角
 }
 
-window.onresize = resize;
-resize();
-
 /* 监听配置 */
+var myStyle = '';
 window.wallpaperPropertyListener = {
-    applyUserProperties: function(properties){
-		// 背景图
-		if(properties.image){
-			if(properties.image.value){
-				document.body.style.backgroundImage = "url('file:///"+ properties.image.value +"')";
-			}else{
-				document.body.style.backgroundImage = "url('bg.jpg')";
-			}
-		}
+    applyUserProperties: function (properties) {
+        // 背景图
+        if (properties.image) {
+            if (properties.image.value) {
+                document.body.style.backgroundImage = "url('file:///" + properties.image.value + "')";
+            } else {
+                document.body.style.backgroundImage = "url('bg.jpg')";
+            }
+        }
+        //频谱图样式
+        if (properties.spectrumStyle) {
+            
+            if (properties.spectrumStyle.value == 1) {
+                //条状
+                //alert('我是条状的');
+                myStyle = 'line';
+                //alert('line')
+
+            } else if ((properties.spectrumStyle.value == 2)) {
+                //圆形
+                // alert('我是圆形的');
+                myStyle = 'round';
+               // alert('round')
+
+            }
+        }
         // 背景填充样式
-        if(properties.gackgroundStyle) {
+        if (properties.gackgroundStyle) {
             var style = "cover";
             var repeat = "no-repeat";
-            switch(properties.gackgroundStyle.value){
+            switch (properties.gackgroundStyle.value) {
                 case 1: // 填充
                     style = 'cover';
                     break;
@@ -57,90 +72,105 @@ window.wallpaperPropertyListener = {
             document.body.style.backgroundRepeat = repeat;
         }
         // 颜色
-        if(properties.color){
-            param.color = properties.color.value.split(' ').map(function(c){return Math.ceil(c*255)});
-            ctx.strokeStyle = 'rgba('+ param.color +','+ param.colorT +')';
+        if (properties.color) {
+            param.color = properties.color.value.split(' ').map(function (c) { return Math.ceil(c * 255) });
+            ctx.strokeStyle = 'rgba(' + param.color + ',' + param.colorT + ')';
         }
         // 颜色透明度
-        if(properties.colorT){
+        if (properties.colorT) {
             param.colorT = properties.colorT.value / 100;
-            ctx.strokeStyle = 'rgba('+ param.color +','+ param.colorT +')';
+            ctx.strokeStyle = 'rgba(' + param.color + ',' + param.colorT + ')';
         };
-		// 模糊颜色
-		if(properties.shadowColor){
-			param.shadowColor = properties.shadowColor.value.split(' ').map(function(c){return Math.ceil(c*255)});
-            ctx.shadowColor = 'rgba('+ param.shadowColor +','+ param.shadowColorT +')';
-		};
+        // 模糊颜色
+        if (properties.shadowColor) {
+            param.shadowColor = properties.shadowColor.value.split(' ').map(function (c) { return Math.ceil(c * 255) });
+            ctx.shadowColor = 'rgba(' + param.shadowColor + ',' + param.shadowColorT + ')';
+        };
         // 模糊透明度
-        if(properties.shadowColorT){
+        if (properties.shadowColorT) {
             param.shadowColorT = properties.shadowColorT.value / 100;
-            ctx.shadowColor = 'rgba('+ param.shadowColor +','+ param.shadowColorT +')';
+            ctx.shadowColor = 'rgba(' + param.shadowColor + ',' + param.shadowColorT + ')';
         };
         // 模糊大小
-        if(properties.shadowBlur){
+        if (properties.shadowBlur) {
             ctx.shadowBlur = param.shadowBlur = properties.shadowBlur.value;
         };
-		// 中心点x
-		if(properties.cX){
-			param.x = properties.cX.value / 100;
-		};
-		// 中心点y
-		if(properties.cY){
-			param.y = properties.cY.value / 100;
-		};
+        // 中心点x
+        if (properties.cX) {
+            param.x = properties.cX.value / 100;
+        };
+        // 中心点y
+        if (properties.cY) {
+            param.y = properties.cY.value / 100;
+        };
         // 基础高
-        if(properties.base){
+        if (properties.base) {
             param.base = properties.base.value;
         };
-		// 线宽
-		if(properties.lineWidth){
-			ctx.lineWidth = param.lineWidth = properties.lineWidth.value;
-		};
+        // 线宽
+        if (properties.lineWidth) {
+            ctx.lineWidth = param.lineWidth = properties.lineWidth.value;
+        };
         // 幅度
-        if(properties.range){
+        if (properties.range) {
             param.range = properties.range.value;
         };
         // 间距
-        if(properties.spacing){
+        if (properties.spacing) {
             param.spacing = properties.spacing.value;
         };
         // 圆角
-        if(properties.round){
+        if (properties.round) {
             param.round = properties.round.value;
-            if(properties.round.value) {
+            if (properties.round.value) {
                 ctx.lineCap = "round";
-            }else {
+            } else {
                 ctx.lineCap = "butt";
             }
         };
-	}
+    }
+
 }
+
 
 window.wallpaperRegisterAudioListener && window.wallpaperRegisterAudioListener(wallpaperAudioListener);
 
-function wallpaperAudioListener(audioArray){
-	refresh(audioArray)
+function wallpaperAudioListener(audioArray) {
+    refresh(audioArray)
 }
 
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+setTimeout(function resize() {
+    if (myStyle == 'line') {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    } else if(myStyle == 'round'){
+        canvas.width = 500;
+        canvas.height = 500;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    }else{
+        alert(1);
+    }
+
     ctx.shadowBlur = param.shadowBlur;
     ctx.shadowColor = param.shadowColor;
     ctx.strokeStyle = param.color;
     ctx.lineWidth = param.lineWidth;
 
-    if(param.round) {
+    if (param.round) {
         ctx.lineCap = "round";
-    }else {
+    } else {
         ctx.lineCap = "butt";
     }
-}
+},1000);
+
+
 
 function style(audioArray) {
-	var audioArray = audioArray || [];
+    var audioArray = audioArray || [];
     var centerX = canvas.width * param.x;
     var centerY = canvas.height * param.y;
 
@@ -154,10 +184,10 @@ function style(audioArray) {
     */
 
     // 左
-    for(var i = 0; i < audioArray.length; i++) {
+    for (var i = 0; i < audioArray.length; i++) {
         var height = audioArray[i] ? audioArray[i] : 0;
         height = height * param.range;
-        if(param.base) height ++;
+        if (param.base) height++;
 
         var x = (i + 1) * (param.lineWidth + param.spacing);
 
@@ -169,10 +199,10 @@ function style(audioArray) {
     }
 
     // 右
-    for(var i = 0; i < audioArray.length; i++) {
+    for (var i = 0; i < audioArray.length; i++) {
         var height = audioArray[i] ? audioArray[i] : 0;
         height = height * param.range;
-        if(param.base) height ++;
+        if (param.base) height++;
 
         var x = (i + 1) * (param.lineWidth + param.spacing);
 
@@ -181,14 +211,73 @@ function style(audioArray) {
             y1: centerY - height / 2,
             y2: centerY + height / 2
         });
-    }	
+    }
+}
+function drawRound(audioArray) {
+    //清空圆形区域
+    ctx.clearRect(0, 0, 500,  500);
+    /// alert('begin');
+
+
+    // document.write(canvas.width);
+    // document.write(canvas.height);
+
+    // document.write('<span>');
+    //将128个音频指令的数字塞入360的数组中
+    var output = [];
+    output.length = 360;
+    var output_k = 0;
+    for (output_index = 0; output_index < 360; output_index++) {
+        output[output_index] = audioArray[(output_k++) % 128];
+        // document.write(output[output_index].toFixed(4)
+        //     + "; ");
+
+    }
+    //  alert('before draw');
+    //画圆（迫真）
+    for (var i = 0; i < 360; i++) {
+        //Note1:加号右边：坐标与绘图的起始点坐标x y值一致
+        //Note2:加号左边：左边为半径基础上的坐标偏移比例||乘号右边为半径；
+        //Note3: value（半径增量）+ x(实际半径)
+        //  var value = 5;
+        var initValue = output[i].toFixed(4) * 1000; //根据频域长度确定半径增益 
+        var value = parseInt(initValue);
+        var tip = document.getElementById('tip');
+        //tip.innerHTML = value;
+
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.moveTo(120, 115);
+        ctx.lineTo(Math.cos((i * 1) / 180 * Math.PI) * (95 + value) + 120, (-Math.sin((i * 1) / 180 * Math.PI) * (95 + value) + 115));
+        ctx.stroke();
+        //绘制右边
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.moveTo(120, 115);
+        ctx.lineTo(Math.sin((i * 1) / 180 * Math.PI) * (95 + value) + 120, (-Math.cos((i * 1) / 180 * Math.PI) * (95 + value) + 115));
+        ctx.stroke();
+        //绘制上边
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.moveTo(120, 115);
+        ctx.lineTo(-Math.cos((i * 1) / 180 * Math.PI) * (95 + value) + 120, (Math.sin((i * 1) / 180 * Math.PI) * (95 + value) + 115));
+        ctx.stroke();
+        //绘制下边
+        ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.moveTo(120, 115);
+        ctx.lineTo(-Math.sin((i * 1) / 180 * Math.PI) * (95 + value) + 120, (Math.cos((i * 1) / 180 * Math.PI) * (95 + value) + 115));
+        ctx.stroke();
+
+        //ctx.closePath(); //结束这次的绘制，等待下次执行
+    }
 }
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     // 画线
     ctx.beginPath();
-    for(var i = 0; i < param.arr.length; i++) {
+    for (var i = 0; i < param.arr.length; i++) {
         ctx.moveTo(param.arr[i].x, param.arr[i].y1);
         ctx.lineTo(param.arr[i].x, param.arr[i].y2);
     };
@@ -197,6 +286,11 @@ function draw() {
 }
 
 function refresh(audioArray) {
-    style(audioArray);
-    draw();
+    if (myStyle == 'line') {
+        style(audioArray);
+        draw();
+    } else {
+        drawRound(audioArray);
+    }
+
 }
